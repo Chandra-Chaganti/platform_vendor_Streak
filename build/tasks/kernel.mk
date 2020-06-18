@@ -34,6 +34,8 @@
 #
 #   KERNEL_SUPPORTS_LLVM_TOOLS         = If set, switches ar, nm, objcopy, objdump to llvm tools instead of using GNU Binutils, optional
 #
+#   KERNEL_SUPPORTS_LLD                = If set, uses LLVM's LLD Linker
+#
 #   BOARD_KERNEL_IMAGE_NAME            = Built image name
 #                                          for ARM use: zImage
 #                                          for ARM64 use: Image.gz
@@ -186,7 +188,7 @@ ifeq ($(TARGET_KERNEL_CLANG_COMPILE),true)
         # Use the default version of clang if TARGET_KERNEL_CLANG_VERSION hasn't been set by the device config
         KERNEL_CLANG_VERSION := $(LLVM_PREBUILTS_VERSION)
     endif
-    # As 
+    # As
     ifeq ($(KERNEL_SUPPORTS_LLVM_TOOLS),true)
         KERNEL_LD := LD=ld.lld
         KERNEL_AR := AR=llvm-ar
@@ -201,6 +203,15 @@ ifeq ($(TARGET_KERNEL_CLANG_COMPILE),true)
         KERNEL_OBJDUMP :=
         KERNEL_NM :=
         KERNEL_STRIP :=
+    endif
+    ifeq ($(KERNEL_SUPPORTS_LLD),true)
+        ifeq ($(KERNEL_SUPPORTS_LLVM_TOOLS),true)
+            $(warning KERNEL_SUPPORTS_LLD makes no sense when KERNEL_SUPPORTS_LVM_TOOLS is set)
+        else
+            KERNEL_LD := LD=ld.lld
+        endif
+    else ifneq ($(KERNEL_SUPPORTS_LLVM_TOOLS),true)
+        KERNEL_LD :=
     endif
     TARGET_KERNEL_CLANG_PATH ?= $(BUILD_TOP)/prebuilts/clang/host/$(HOST_OS)-x86/$(KERNEL_CLANG_VERSION)
     ifeq ($(KERNEL_ARCH),arm64)
