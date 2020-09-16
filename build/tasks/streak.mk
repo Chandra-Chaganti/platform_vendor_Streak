@@ -22,10 +22,12 @@ endif
 
 STREAK_TARGET_PACKAGE := $(PRODUCT_OUT)/$(STREAK_VERSION).zip
 
+MD5 := prebuilts/build-tools/path/$(HOST_OS)-x86/md5sum
+
 .PHONY: streak bacon
 streak: otapackage
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(STREAK_TARGET_PACKAGE)
-	$(hide) $(MD5SUM) $(STREAK_TARGET_PACKAGE) | sed "s|$(PRODUCT_OUT)/||" > $(STREAK_TARGET_PACKAGE).md5sum
+	$(hide) $(MD5) $(STREAK_TARGET_PACKAGE) | sed "s|$(PRODUCT_OUT)/||" > $(STREAK_TARGET_PACKAGE).md5sum
 
 	@echo  ${CL_MAG}""${CL_MAG}
 	@echo -e ${CL_MAG}" ▄▄▄·▄▄▄         ▐▄▄▄▄▄▄ . ▄▄· ▄▄▄▄▄.▄▄ · ▄▄▄▄▄▄▄▄  ▄▄▄ . ▄▄▄· ▄ •▄"${CL_MAG}
