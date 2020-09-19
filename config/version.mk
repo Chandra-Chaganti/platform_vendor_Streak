@@ -7,21 +7,19 @@ endif
 TARGET_PRODUCT_SHORT := $(subst streak_,,$(STREAK_BUILD_TYPE))
 
 # Set all versions
-STREAK_MOD_VERSION := 1.0
+STREAK_VERSION := 1.0
+STREAK_CODENAME := Hummingbird
 
 CURRENT_DEVICE=$(shell echo "$(TARGET_PRODUCT)" | cut -d'_' -f 2,3)
-STREAK_DATE_YEAR := $(shell date -u +%Y)
-STREAK_DATE_MONTH := $(shell date -u +%m)
-STREAK_DATE_DAY := $(shell date -u +%d)
-STREAK_DATE_HOUR := $(shell date -u +%H)
-STREAK_DATE_MINUTE := $(shell date -u +%M)
-CUSTOM_BUILD_DATE := $(STREAK_DATE_YEAR)$(STREAK_DATE_MONTH)$(STREAK_DATE_DAY)-$(STREAK_DATE_HOUR)$(STREAK_DATE_MINUTE)
+BUILD_DATE := $(shell date -u +%d%m%Y)
+BUILD_TIME := $(shell date -u +%H%M)
+BUILD_DATE_TIME := $(BUILD_DATE)$(BUILD_TIME)
 
-STREAK_VERSION := ProjectStreak-$(STREAK_MOD_VERSION)-$(CURRENT_DEVICE)-$(STREAK_BUILD_TYPE)-$(CUSTOM_BUILD_DATE)
-
-STREAK_FINGERPRINT := ProjectStreak/$(STREAK_MOD_VERSION)/$(PLATFORM_VERSION)/$(TARGET_PRODUCT_SHORT)/$(CUSTOM_BUILD_DATE)
+STREAK_VERSION := ProjectStreak-$(STREAK_VERSION)-$(STREAK_CODENAME)-$(CURRENT_DEVICE)-$(STREAK_BUILD_TYPE)-$(BUILD_DATE)-$(BUILD_TIME)
 
 CUSTOM_PROPERTIES += \
-  ro.modversion=$(STREAK_MOD_VERSION) \
-  ro.streak.fingerprint=$(STREAK_FINGERPRINT)
-  ro.streak.build.type=$(STREAK_BUILD_TYPE)
+    ro.streak.version=$(STREAK_VERSION) \
+    ro.build.datetime=$(BUILD_DATE_TIME) \
+    ro.streak.build.type=$(STREAK_BUILD_TYPE) \
+    ro.streak.codename=$(STREAK_CODENAME) \
+    ro.streak.datetime=$(BUILD_DATE)
